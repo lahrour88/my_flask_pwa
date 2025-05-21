@@ -1,0 +1,9 @@
+gunicorn
+Flask
+supabase
+validate_email
+python-dotenv
+Werkzeug
+colorama
+smtplib
+email
