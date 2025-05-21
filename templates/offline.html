@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>غير متصل</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>عذرًا، أنت غير متصل بالإنترنت</h1>
+    <p>يرجى التحقق من اتصالك وحاول مرة أخرى.</p>
+    <div id="offline-posts">
+    </div>
+    <script src="/static/js/script.js"></script>
+    <script src="static/js/script.js"></script>
+    <script>
+        function loadFromIndexedDB(storeName, callback) {
+            let request = indexedDB.open("MyDatabase", 1);
+        
+            request.onsuccess = function (event) {
+                let db = event.target.result;
+                let transaction = db.transaction(storeName, "readonly");
+                let store = transaction.objectStore(storeName);
+                let getAll = store.getAll();
+        
+                getAll.onsuccess = function () {
+                    callback(getAll.result);
+                };
+            };
+        }
+        
+        // تحميل المنشورات عند فتح الصفحة
+        document.addEventListener("DOMContentLoaded", function () {
+            loadFromIndexedDB("posts", function (posts) {
+                let container = document.getElementById("offline-posts");
+                posts.forEach(post => {
+                    let div = document.createElement("div");
+                    div.innerHTML = `<h2>${post.title}</h2><p>${post.content}</p>`;
+                    container.appendChild(div);
+                });
+            });
+        });
+    </script>            
+</body>
+</html>
